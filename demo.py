@@ -126,7 +126,10 @@ if __name__ == '__main__':
           pts = pts.reshape(4, -1)
           draw_box_points(im, pts, color=(0, 255, 0), thickness=1)
 
-        cv2.imshow('img', im)
-        cv2.waitKey(10)
+        # cv2.imshow('img', im)
+        # cv2.waitKey(10)
+        import matplotlib.pyplot as plt
+        plt.imshow(im)
+        plt.show()
 
 
