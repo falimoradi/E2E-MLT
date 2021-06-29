@@ -29,6 +29,8 @@ import unicodedata as ud
 import ocr_gen
 from torch import optim
 
+import codecs
+
 lr_decay = 0.99
 momentum = 0.9
 weight_decay = 0
@@ -37,7 +39,7 @@ disp_interval = 100
 
 norm_height = 44
 
-f = open('codec.txt', 'r')
+f = codecs.open('codec.txt', 'r', 'utf-8)
 codec = f.readlines()[0]
 #codec = u' !"#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_abcdefghijklmnopqrstuvwxyz{|}~£ÁČĎÉĚÍŇÓŘŠŤÚŮÝŽáčďéěíňóřšťúůýž'
 codec_rev = {}
@@ -425,7 +427,7 @@ def process_boxes(images, im_data, iou_pred, roi_pred, angle_pred, score_maps, g
 def main(opts):
   
   model_name = 'E2E-MLT'
-  net = ModelResNetSep2(attention=True)
+  net = ModelMLTRCTW(attention=True)
   print("Using {0}".format(model_name))
   
   learning_rate = opts.base_lr
@@ -603,7 +605,7 @@ if __name__ == '__main__':
   parser.add_argument('-train_list', default='sample_train_data/MLT/trainMLT.txt')
   parser.add_argument('-ocr_feed_list', default='sample_train_data/MLT_CROPS/gt.txt')
   parser.add_argument('-save_path', default='backup')
-  parser.add_argument('-model', default='e2e-mlt.h5')
+  parser.add_argument('-model', default='e2e-mltrctw.h5')
   parser.add_argument('-debug', type=int, default=1)
   parser.add_argument('-batch_size', type=int, default=2)
   parser.add_argument('-ocr_batch_size', type=int, default=1)
