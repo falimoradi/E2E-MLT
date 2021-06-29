@@ -75,7 +75,7 @@ if __name__ == '__main__':
     if True:
 #       ret, im = cap.read()
       im = cv2.imread('1.jpg')
-      im = cv2.cvtColor(im, cv2.COLOR_BGR2RGB)
+      # im = cv2.cvtColor(im, cv2.COLOR_BGR2RGB)
 
       if True:
         im_resized, (ratio_h, ratio_w) = resize_image(im, scale_up=False)
@@ -128,8 +128,5 @@ if __name__ == '__main__':
 
         # cv2.imshow('img', im)
         # cv2.waitKey(10)
-        import matplotlib.pyplot as plt
-        plt.imshow(im)
-        plt.show()
-
+        cv2.imwrite('res.jpg', im)
 
