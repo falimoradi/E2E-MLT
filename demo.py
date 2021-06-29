@@ -66,16 +66,18 @@ if __name__ == '__main__':
     print('Using cuda ...')
     net = net.cuda()
 
-  cap = cv2.VideoCapture(0)
-  cap.set(cv2.CAP_PROP_AUTOFOCUS, 1)
-  ret, im = cap.read()
+#   cap = cv2.VideoCapture(0)
+#   cap.set(cv2.CAP_PROP_AUTOFOCUS, 1)
+#   ret, im = cap.read()
 
   frame_no = 0
   with torch.no_grad():
-    while ret:
-      ret, im = cap.read()
+    if True:
+#       ret, im = cap.read()
+      im = cv2.imread('1.jpg')
+      im = cv2.cvtColor(im, cv2.COLOR_BGR2RGB)
 
-      if ret==True:
+      if True:
         im_resized, (ratio_h, ratio_w) = resize_image(im, scale_up=False)
         images = np.asarray([im_resized], dtype=np.float)
         images /= 128
