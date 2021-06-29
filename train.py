@@ -39,7 +39,7 @@ disp_interval = 100
 
 norm_height = 44
 
-f = codecs.open('codec.txt', 'r', 'utf-8)
+f = codecs.open('codec.txt', 'r', 'utf-8')
 codec = f.readlines()[0]
 #codec = u' !"#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_abcdefghijklmnopqrstuvwxyz{|}~£ÁČĎÉĚÍŇÓŘŠŤÚŮÝŽáčďéěíňóřšťúůýž'
 codec_rev = {}
