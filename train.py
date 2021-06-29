@@ -16,7 +16,7 @@ import timeit
 import math
 import random
 
-from models import ModelResNetSep2
+from models import ModelResNetSep2, ModelMLTRCTW
 import torch.autograd as autograd
 import torch.nn.functional as F
 
