@@ -761,5 +761,5 @@ class ModelMLTRCTW(nn.Module):
           roi_gt_s = roi_gt_s.permute(0, 2, 3, 1)
           roi_gt_s = roi_gt_s / 2
           iou_loss(roi_gt_s, byte_mask, roi_pred[1], self.box_loss_value)
-    
+    self.segm_loss_value = self.iou_loss_value
     return torch.stack( (self.iou_loss_value, self.angle_loss_value, self.box_loss_value) )
