@@ -8,8 +8,9 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 import os
+import codecs
 
-f = open('codec.txt', 'r')
+f = codecs.open('codec.txt', 'r', 'utf-8')
 codec = f.readlines()[0]
 f.close()
 print(len(codec))
@@ -41,7 +42,7 @@ disp_interval = 500
 def main(opts):
   
   model_name = 'E2E'
-  net = ModelResNetSep2(attention=True)
+  net = ModelMLTRCTW(attention=True)
   acc = []
   
   if opts.cuda:
@@ -135,7 +136,7 @@ if __name__ == '__main__':
   parser.add_argument('-train_list', default='/home/busta/data/90kDICT32px/train_mlt.txt')
   parser.add_argument('-valid_list', default='/home/busta/data/icdar_ch8_validation/ocr_valid.txt')
   parser.add_argument('-save_path', default='backup2')
-  parser.add_argument('-model', default='/mnt/textspotter/tmp/DS_CVPR/backup2/ModelResNetSep2_25000.h5')
+  parser.add_argument('-model', default='e2e-mltrctw.h5')
   parser.add_argument('-debug', type=int, default=0)
   parser.add_argument('-batch_size', type=int, default=4)
   parser.add_argument('-num_readers', type=int, default=1)
