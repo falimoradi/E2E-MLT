@@ -487,6 +487,7 @@ def main(opts):
     
     try:
       loss = net.loss(seg_pred, smaps_var, training_mask_var, angle_pred, angle_gt, roi_pred, geo_gt)
+      loss = torch.sum(loss)
     except:
       import sys, traceback
       traceback.print_exc(file=sys.stdout)
