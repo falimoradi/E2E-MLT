@@ -465,6 +465,8 @@ def main(opts):
   
   
   for step in range(step_start, opts.max_iters):
+    sys.stdout.write("STEP: %d   \r" % (step) )
+    sys.stdout.flush()
     
     # batch
     images, image_fns, score_maps, geo_maps, training_masks, gtso, lbso, gt_idxs = next(data_generator)
