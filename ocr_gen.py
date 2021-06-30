@@ -23,7 +23,7 @@ for i in range(1, 100):
 
 import unicodedata as ud
 
-f = open('codec.txt', 'r')
+f = open('codec_mine2.txt', 'r')
 codec = f.readlines()[0]
 codec_rev = {}
 index = 4
