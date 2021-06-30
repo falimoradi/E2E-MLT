@@ -30,6 +30,7 @@ import ocr_gen
 from torch import optim
 
 import codecs
+import sys
 
 lr_decay = 0.99
 momentum = 0.9
