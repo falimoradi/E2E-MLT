@@ -30,7 +30,6 @@ import ocr_gen
 from torch import optim
 
 import codecs
-import sys
 
 lr_decay = 0.99
 momentum = 0.9
@@ -466,6 +465,7 @@ def main(opts):
   
   
   for step in range(step_start, opts.max_iters):
+    import sys
     sys.stdout.write("STEP: %d   \r" % (step) )
     sys.stdout.flush()
     
