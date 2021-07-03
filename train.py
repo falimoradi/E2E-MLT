@@ -439,6 +439,7 @@ def main(opts):
     print('loading model from %s' % args.model)
     step_start, learning_rate = net_utils.load_net(args.model, net, optimizer)
   step_start = 0
+  net.conv11 = Conv2d(256, 150, (1, 1), padding=(0,0))
   if opts.cuda:
     net.cuda()
     
