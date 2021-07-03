@@ -10,6 +10,8 @@ from data_util import GeneratorEnqueuer
 
 import PIL
 import torchvision.transforms as transforms
+import codecs
+
 
 use_pyblur = 0
 
@@ -23,7 +25,7 @@ for i in range(1, 100):
 
 import unicodedata as ud
 
-f = open('codec_mine2.txt', 'r')
+f = codecs.open('codec_mine2.txt', 'r', 'utf-8')
 codec = f.readlines()[0]
 codec_rev = {}
 index = 4
@@ -36,12 +38,13 @@ def get_images(data_path):
   base_dir = os.path.dirname(data_path)
   files_out = []
   cnt = 0
-  with open(data_path) as f:
+  with codecs.open(data_path, 'r', 'utf-8') as f:
     while True:
       line = f.readline()
       if not line: 
         break
       line = line.strip()
+      line = line.replace('\ufeff', '')
       if len(line) == 0:
         continue
       if not line[0] == '/':
@@ -236,4 +239,6 @@ if __name__ == '__main__':
   data_generator = get_batch(num_workers=1, batch_size=1)
   while True:
     data = next(data_generator)
+    print(data)
+    break
   
