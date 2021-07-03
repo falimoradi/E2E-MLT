@@ -505,7 +505,7 @@ def main(opts):
        
     try:
       
-      if step > 10000 or True: #this is just extra augumentation step ... in early stage just slows down training
+      if step > 10000 or False: #this is just extra augumentation step ... in early stage just slows down training
         ctcl, gt_b_good, gt_b_all = process_boxes(images, im_data, seg_pred[0], roi_pred[0], angle_pred[0], score_maps, gt_idxs, gtso, lbso, features, net, ctc_loss, opts, debug=opts.debug)
         ctc_loss_val += ctcl.data.cpu().numpy()[0]
         loss = loss + ctcl
