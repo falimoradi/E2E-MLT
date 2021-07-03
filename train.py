@@ -19,6 +19,8 @@ import random
 from models import ModelResNetSep2, ModelMLTRCTW
 import torch.autograd as autograd
 import torch.nn.functional as F
+from torch.nn import LeakyReLU, Conv2d, Dropout2d, LogSoftmax, InstanceNorm2d
+
 
 from torch_baidu_ctc import ctc_loss, CTCLoss
 #from warpctc_pytorch import CTCLoss
