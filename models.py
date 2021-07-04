@@ -618,7 +618,6 @@ class ModelMLTRCTW(nn.Module):
     
     
     x = self.drop1(x)
-    print(self.conv11)
     x = self.conv11(x)
     x = x.squeeze(2)
 
