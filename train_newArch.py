@@ -432,6 +432,7 @@ def main(opts):
   net = ModelMLTRCTW(attention=True)
   net.conv11 = Conv2d(256, 150, (1, 1), padding=(0,0))  # 150 chars instead of 8400
   print("Using {0}".format(model_name))
+  print(net.conv11)
   
   learning_rate = opts.base_lr
   if opts.cuda:
@@ -441,6 +442,7 @@ def main(opts):
   if os.path.exists(opts.model):
     print('loading model from %s' % args.model)
     step_start, learning_rate = net_utils.load_net(args.model, net, optimizer)
+  print(net.conv11)
   step_start = 0
   if opts.cuda:
     net.cuda()
