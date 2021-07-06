@@ -22,6 +22,10 @@ from PIL import Image
 from PIL import ImageFont
 from PIL import ImageDraw
 
+from torch.nn import Conv2d
+
+
+
 f = open('codec_mine2.txt', 'r', encoding='utf-8')
 codec = f.readlines()[0]
 f.close()
