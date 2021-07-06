@@ -9,7 +9,7 @@ import numpy as np
 
 from nms import get_boxes
 
-from models import ModelResNetSep2
+from models import ModelResNetSep2, ModelMLTRCTW
 import net_utils
 
 from ocr_utils import ocr_image
@@ -58,7 +58,8 @@ if __name__ == '__main__':
 
   args = parser.parse_args()
 
-  net = ModelResNetSep2(attention=True)
+  net = ModelMLTRCTW(attention=True)
+  net.conv11 = Conv2d(256, 150, (1, 1), padding=(0,0))
   net_utils.load_net(args.model, net)
   net = net.eval()
 
