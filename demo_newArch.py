@@ -130,6 +130,7 @@ if __name__ == '__main__':
           out_boxes.append(box)
           print(det_text)
           
+          pts = pts.reshape((1, -1))
           for pt in pts:
             annot += str(pt) + ','
           annot += det_text + '\n'
