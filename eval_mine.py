@@ -667,6 +667,7 @@ if __name__ == '__main__':
 				
 				det_text, conf2, dec_s, word_splits = print_seq_ext(labels[0, :], codec)	
 				det_text = det_text.strip()
+				det_text = det_text[::-1]
 				
 				if args.debug:	 
 					im += 1
