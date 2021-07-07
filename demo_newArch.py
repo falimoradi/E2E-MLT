@@ -131,7 +131,7 @@ if __name__ == '__main__':
           print(det_text)
           
           pts = pts.reshape((1, 8))
-          for pt in pts:
+          for pt in pts[0]:
             annot += str(pt) + ','
           annot += det_text + '\n'
 
