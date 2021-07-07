@@ -76,7 +76,10 @@ if __name__ == '__main__':
 #   cap.set(cv2.CAP_PROP_AUTOFOCUS, 1)
 #   ret, im = cap.read()
 
-  frame_no = 0
+  # frame_no = 0
+  imgs = os.listdir()
+  imgs = [im for im in imgs if im.lower().endswith('.jpg')]
+  
   with torch.no_grad():
     for im_name in imgs:
       annot = ''
