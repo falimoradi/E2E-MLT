@@ -682,7 +682,7 @@ if __name__ == '__main__':
 				
 				# try:
 				# 	if len(det_text) > 0 and 'ARABIC' in ud.name(det_text[0]):
-				det_text = det_text[::-1]
+				# det_text = det_text[::-1]  #########################################
 				# except:
 				# 	pass
 				
@@ -743,7 +743,7 @@ if __name__ == '__main__':
 				draw_text = det_text
 				# try:
 				# 	if len(det_text) > 0 and 'ARABIC' in ud.name(det_text[0]):
-				draw_text = det_text[::-1]
+				# draw_text = det_text[::-1] ################################################
 				# except:
 				# 	pass
 				
