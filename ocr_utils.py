@@ -11,7 +11,7 @@ import torch
 import torch.nn.functional as F
 
 import cv2
-import net_utlis
+import net_utils
 
 
 def print_seq_ext(wf, codec):
