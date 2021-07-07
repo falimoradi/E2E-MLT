@@ -10,6 +10,10 @@ import numpy as np
 import torch
 import torch.nn.functional as F
 
+import cv2
+import net_utlis
+
+
 def print_seq_ext(wf, codec):
   prev = 0
   word = ''
@@ -64,6 +68,21 @@ def ocr_image(net, codec, im_data, detection):
   boxo = detection
   boxr = boxo[0:8].reshape(-1, 2)
   
+  
+  poly_mask = np.zeros((im_data.size(2), im_data.size(3)), dtype=np.uint8)
+  pts = np.asarray([boxr[0][0]-2, boxr[0][1]+10, boxr[1][0]-2, boxr[1][1]-10, boxr[2][0]+2, boxr[2][1]-10, boxr[3][0]+2, boxr[3][1]+10]).reshape((-1, 2))
+  pts = np.asarray([pts.round()], np.int32)
+  # print(pts)
+  poly_mask = cv2.fillPoly(poly_mask, pts, 1)
+  poly_mask = poly_mask.reshape((1, poly_mask.shape[0], poly_mask.shape[1], 1))
+  poly_mask = net_utils.np_to_variable(poly_mask, is_cuda=True).permute(0, 3, 1, 2)
+  im_data_cp = im_data.detach().clone()
+  im_data_cp += 1
+  im_data_cp *= poly_mask
+  im_data_cp -= 1
+  
+  
+  
   center = (boxr[0, :] + boxr[1, :] + boxr[2, :] + boxr[3, :]) / 4
   
   dw = boxr[2, :] - boxr[1, :]
@@ -108,7 +127,7 @@ def ocr_image(net, codec, im_data, detection):
   grid = F.affine_grid(theta, torch.Size((1, 3, int(target_h), int(target_gw))))
   
   
-  x = F.grid_sample(im_data, grid)
+  x = F.grid_sample(im_data_cp, grid)
   
   features = net.forward_features(x)
   labels_pred = net.forward_ocr(features)
