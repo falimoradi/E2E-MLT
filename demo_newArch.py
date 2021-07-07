@@ -24,9 +24,9 @@ from PIL import ImageDraw
 
 from torch.nn import Conv2d
 
+import codecs
 
-
-f = open('codec_mine2.txt', 'r', encoding='utf-8')
+f = codecs.open('codec_mine2.txt', 'r', encoding='utf-8')
 codec = f.readlines()[0]
 f.close()
 
