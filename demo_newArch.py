@@ -26,6 +26,7 @@ from torch.nn import Conv2d
 
 import codecs
 
+
 f = codecs.open('codec_mine2.txt', 'r', encoding='utf-8')
 codec = f.readlines()[0]
 f.close()
@@ -77,9 +78,10 @@ if __name__ == '__main__':
 
   frame_no = 0
   with torch.no_grad():
-    if True:
+    for im_name in imgs:
+      annot = ''
 #       ret, im = cap.read()
-      im = cv2.imread('1.jpg')
+      im = cv2.imread(im_name)
       # im = cv2.cvtColor(im, cv2.COLOR_BGR2RGB)
 
       if True:
@@ -124,14 +126,20 @@ if __name__ == '__main__':
           draw.text((center[0], center[1]), det_text, fill = (0,255,0),font=font2)
           out_boxes.append(box)
           print(det_text)
+          
+          for pt in pts:
+            annot += str(pt + ',')
+          annot += det_text + '\n'
 
         im = np.array(img)
         for box in out_boxes:
-          pts  = box[0:8]
+          pts = box[0:8]
           pts = pts.reshape(4, -1)
           draw_box_points(im, pts, color=(0, 255, 0), thickness=1)
 
         # cv2.imshow('img', im)
         # cv2.waitKey(10)
-        cv2.imwrite('res.jpg', im)
+        cv2.imwrite('{}_res.jpg'.format(im_name.split('.')[0]), im)
+        with codecs.open('{}.txt'.format(im_name.split('.')[0]), 'w', 'utf-8') as f:
+          f.write(annot)
 
