@@ -230,7 +230,6 @@ def evaluate_image(img, detections, gt_rect, gt_txts, iou_th=0.5, iou_th_vis=0.5
 			if ratio > iou_th:
 				if not gt_no in gt_to_detection:
 					gt_to_detection[gt_no] = [0, 0]
-				
 				print(det_text, txt)
 				edit_dist = editdistance.eval(det_text.lower(), txt.lower())
 				if edit_dist <= 1:
@@ -666,8 +665,9 @@ if __name__ == '__main__':
 				conf_raw = np.exp(ctc_f[ind])
 				
 				det_text, conf2, dec_s, word_splits = print_seq_ext(labels[0, :], codec)	
+				det_text, conf2, dec_s, word_splits = print_seq_ext(labels[0, :], codec)
 				det_text = det_text.strip()
-				det_text = det_text[::-1]
+				
 				
 				if args.debug:	 
 					im += 1
@@ -695,6 +695,9 @@ if __name__ == '__main__':
 					for spl in splits_raw:
 			
 						spl[1][0] = spl[1][0].strip()
+						tmp = spl[1][0]
+						tmp = tmp[::-1]
+						spl[1][0] = tmp
 						
 						if len(spl[1][0]) >= eval_text_length:
 							has_long = True
