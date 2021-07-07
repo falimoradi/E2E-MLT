@@ -4,7 +4,7 @@ Created on Aug 25, 2017
 @author: busta
 '''
 
-import cv2
+import cv2, os
 import numpy as np
 
 from nms import get_boxes
