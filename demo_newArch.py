@@ -131,7 +131,7 @@ if __name__ == '__main__':
           print(det_text)
           
           for pt in pts:
-            annot += str(pt + ',')
+            annot += str(pt) + ','
           annot += det_text + '\n'
 
         im = np.array(img)
