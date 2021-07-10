@@ -47,7 +47,7 @@ print(dawg.get_word_count())
 # similar_chars =  ["اإأآآِاٌاَاُاِ", "یا با ئا نا پا تا ثا", "جچحخ", "دذ", "رو", "زژ", "سشصض", "عغ", "فق", "کگ", "طظ"]
 similar_chars =  ["اإأآآِاٌاَاُاِ", "یبئنپتث", "جچحخ", "دذ", "رو", "زژ", "سشصض", "عغ", "فق", "کگ", "طظ"]
 def find_sim(txt1):
-    sims = dawg.search_within_distance(det_txt, dist=1)
+    sims = dawg.search_within_distance(txt1, dist=1)
     list_1 = list(txt1)
     filtered_sims = []
     for i, word in enumerate(sims):
