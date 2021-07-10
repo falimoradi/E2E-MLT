@@ -28,6 +28,8 @@ import unicodedata as ud
 import editdistance
 import codecs
 
+from torch.nn import Conv2d
+
 f = open('codec.txt', 'r')
 codec = f.readlines()[0]
 f.close()
