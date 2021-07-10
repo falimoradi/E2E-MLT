@@ -29,6 +29,55 @@ import editdistance
 import codecs
 from torch.nn import Conv2d
 
+from lexpy.dawg import DAWG
+import codecs
+from operator import eq
+
+
+
+with codecs.open('183478_words.txt', 'r', 'utf-8') as f:
+    words = f.readlines()
+words = [word[:-1] for word in words]
+dawg = DAWG()
+dawg.add_all(words)
+# dawg.add('سلام')
+dawg.reduce()
+print(len(dawg))
+print(dawg.get_word_count())
+# similar_chars =  ["اإأآآِاٌاَاُاِ", "یا با ئا نا پا تا ثا", "جچحخ", "دذ", "رو", "زژ", "سشصض", "عغ", "فق", "کگ", "طظ"]
+similar_chars =  ["اإأآآِاٌاَاُاِ", "یبئنپتث", "جچحخ", "دذ", "رو", "زژ", "سشصض", "عغ", "فق", "کگ", "طظ"]
+def find_sim(txt1):
+    sims = dawg.search_within_distance(det_txt, dist=1)
+    list_1 = list(txt1)
+    filtered_sims = []
+    for i, word in enumerate(sims):
+        list_2 = list(word)
+
+        if len(list_2) - len(list_1) != 0:
+            continue
+
+        idx = list(map(eq, list_1, list_2)).index(False)
+
+        id1 = [i for i, cls in enumerate(similar_chars) if cls.find(list_1[idx]) != -1]
+        id2 = [i for i, cls in enumerate(similar_chars) if cls.find(list_2[idx]) != -1]
+        #
+        idxs = list(set(id1).intersection(id2))
+
+        # if idxs == []:
+        #     continue
+
+        # if len(idxs) > 1:
+        #     print('idxs has len > 1,    idxs = ', idxs)
+        #     continue
+
+        filtered_sims.append(word)
+
+
+    return filtered_sims
+
+
+
+
 f = codecs.open('codec_mine2.txt', 'r', 'utf-8')
 codec = f.readlines()[0]
 f.close()
@@ -667,7 +716,7 @@ if __name__ == '__main__':
 				conf_raw = np.exp(ctc_f[ind])
 				
 				det_text, conf2, dec_s, word_splits = print_seq_ext(labels[0, :], codec)	
-				det_text, conf2, dec_s, word_splits = print_seq_ext(labels[0, :], codec)
+				# det_text, conf2, dec_s, word_splits = print_seq_ext(labels[0, :], codec)
 				det_text = det_text.strip()
 				
 				
@@ -699,7 +748,9 @@ if __name__ == '__main__':
 						spl[1][0] = spl[1][0].strip()
 						tmp = spl[1][0]
 						tmp = tmp[::-1]
+						tmp = find_sim(tmp)[0]
 						spl[1][0] = tmp
+
 						
 						if len(spl[1][0]) >= eval_text_length:
 							has_long = True
@@ -778,7 +829,7 @@ if __name__ == '__main__':
 				cv2.imshow('pix', pix)
 				cv2.waitKey(0)
 	print(" E2E recall {0:.3f} / {1:.3f} / {2:.3f}, precision: {3:.3f}".format(
-                                        tp_e2e_all / float(max(1, gt_e2e_all)),
-                                        tp_all / float(max(1, gt_e2e_all)),
-                                        tp_e2e_ed1_all / float(max(1, gt_e2e_all)),
-                                        tp_all / float(max(1, detecitons_all))))
+		tp_e2e_all / float(max(1, gt_e2e_all)),
+        tp_all / float(max(1, gt_e2e_all)),
+        tp_e2e_ed1_all / float(max(1, gt_e2e_all)),
+		tp_all / float(max(1, detecitons_all))))
