@@ -750,7 +750,7 @@ if __name__ == '__main__':
 						tmp = tmp[::-1]
 						if tmp not in dawg:
 							aa = find_sim(tmp)
-							if aa != []
+							if aa != []:
 								tmp = aa[0]
 						spl[1][0] = tmp
 
