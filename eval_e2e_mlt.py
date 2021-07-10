@@ -686,7 +686,7 @@ if __name__ == '__main__':
 				# try:
 				# 	if len(det_text) > 0 and 'ARABIC' in ud.name(det_text[0]):
 				det_text = det_text[::-1]
-				print(det_text)
+				
 				# except:
 				# 	pass
 				
@@ -697,6 +697,8 @@ if __name__ == '__main__':
 					for spl in splits_raw:
 			
 						spl[1][0] = spl[1][0].strip()
+						a = spl[1][0]
+						spl[1][0] = a[::-1]
 						
 						if len(spl[1][0]) >= eval_text_length:
 							has_long = True
