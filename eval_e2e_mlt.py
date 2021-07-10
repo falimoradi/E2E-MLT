@@ -375,7 +375,7 @@ if __name__ == '__main__':
 	
 	parser = argparse.ArgumentParser()
 	parser.add_argument('-cuda', type=int, default=1)
-	parser.add_argument('-model', default='E2E-MLTRCTW.h5')
+	parser.add_argument('-model', default='e2e-mltrctw.h5')
 	parser.add_argument('-images_dir', default='/home/alimoradi/scene_text_dataset/valid_dataset')
 	parser.add_argument('-debug', type=int, default=0)
 	parser.add_argument('-segm_thresh', default=0.9)
