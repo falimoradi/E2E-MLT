@@ -386,6 +386,7 @@ if __name__ == '__main__':
 	args = parser.parse_args()
 	
 	net = ModelMLTRCTW(attention=True)
+	net.conv11 = Conv2d(256, 8400, (1, 1), padding=(0,0))
 	model_name = 'E2E-MLT_RCTW'
 	print("Using {0}".format(model_name))
 
