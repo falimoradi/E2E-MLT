@@ -232,7 +232,7 @@ def evaluate_image(img, detections, gt_rect, gt_txts, iou_th=0.5, iou_th_vis=0.5
 			if ratio > iou_th:
 				if not gt_no in gt_to_detection:
 					gt_to_detection[gt_no] = [0, 0]
-					
+				print(det_text, '\n', txt)
 				edit_dist = editdistance.eval(det_text.lower(), txt.lower())
 				if edit_dist <= 1:
 					gt_matches_ed1[gt_no] = 1
