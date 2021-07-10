@@ -748,7 +748,10 @@ if __name__ == '__main__':
 						spl[1][0] = spl[1][0].strip()
 						tmp = spl[1][0]
 						tmp = tmp[::-1]
-						tmp = find_sim(tmp)[0]
+						if tmp not in dawg:
+							aa = find_sim(tmp)
+							if aa != []
+								tmp = aa[0]
 						spl[1][0] = tmp
 
 						
