@@ -27,6 +27,7 @@ import csv
 import unicodedata as ud
 import editdistance
 import codecs
+from torch.nn import Conv2d
 
 f = codecs.open('codec_mine2.txt', 'r', 'utf-8')
 codec = f.readlines()[0]
@@ -230,7 +231,7 @@ def evaluate_image(img, detections, gt_rect, gt_txts, iou_th=0.5, iou_th_vis=0.5
 			if ratio > iou_th:
 				if not gt_no in gt_to_detection:
 					gt_to_detection[gt_no] = [0, 0]
-				print(det_text, txt)
+				# print(det_text, txt)
 				edit_dist = editdistance.eval(det_text.lower(), txt.lower())
 				if edit_dist <= 1:
 					gt_matches_ed1[gt_no] = 1
@@ -383,9 +384,10 @@ if __name__ == '__main__':
 	parser.add_argument('-out_dir', default='eval')
 	parser.add_argument('-eval_text_length', type=int, default=1)  # 3
 	
-	args = parser.parse_args()
+	args = parser.parse_args()	
 	
 	net = ModelMLTRCTW(attention=True)
+	net.conv11 = Conv2d(256, 150, (1, 1), padding=(0,0))
 	model_name = 'E2E-MLT_FA'
 	print("Using {0}".format(model_name))
 
@@ -449,7 +451,7 @@ if __name__ == '__main__':
 				# 		# continue
 				gt_rect, gt_txts = load_gt(res_gt)
 			
-			print(img_name)
+			# print(img_name)
 			
 			img = cv2.imread(img_name)
 			
@@ -606,7 +608,7 @@ if __name__ == '__main__':
 					[boxr[0][0] - 2, boxr[0][1] + 10, boxr[1][0] - 2, boxr[1][1] - 10, boxr[2][0] + 2, boxr[2][1] - 10,
 					 boxr[3][0] + 2, boxr[3][1] + 10]).reshape((-1, 2))
 				pts = np.asarray([pts.round()], np.int32)
-				print(pts)
+				# print(pts)
 				poly_mask = cv2.fillPoly(poly_mask, pts, 1)
 				poly_mask = poly_mask.reshape((1, poly_mask.shape[0], poly_mask.shape[1], 1))
 				poly_mask = net_utils.np_to_variable(poly_mask, is_cuda=True).permute(0, 3, 1, 2)
@@ -712,7 +714,9 @@ if __name__ == '__main__':
 							# if conf_factor < 0.01:
 							#	print('Skipping {0} - {1}'.format(spl[1][0], conf_factor))
 							#	continue
-							print('{0} - {1}'.format(spl[1][0], conf_factor))
+
+
+							# print('{0} - {1}'.format(spl[1][0], conf_factor))
 							boxw = boxw.reshape(8)
 							detetcions_out.append([boxw, spl[1][0]])
 							
@@ -729,11 +733,11 @@ if __name__ == '__main__':
 				tp_e2e_ed1_all += tp_e2e_ed1
 				detecitons_all += len(detetcions_out)
 				
-				print("	E2E recall {0:.3f} / {1:.3f} / {2:.3f}, precision: {3:.3f}".format(
-					tp_e2e_all / float(max(1, gt_e2e_all)),
-					tp_all / float(max(1, gt_e2e_all)),
-					tp_e2e_ed1_all / float(max(1, gt_e2e_all)),
-					tp_all / float(max(1, detecitons_all))))
+				# print("	E2E recall {0:.3f} / {1:.3f} / {2:.3f}, precision: {3:.3f}".format(
+				# 	tp_e2e_all / float(max(1, gt_e2e_all)),
+				# 	tp_all / float(max(1, gt_e2e_all)),
+				# 	tp_e2e_ed1_all / float(max(1, gt_e2e_all)),
+				# 	tp_all / float(max(1, detecitons_all))))
 				
 			pil_img = Image.fromarray(pix)
 			pil_draw = ImageDraw.Draw(pil_img)
@@ -773,4 +777,8 @@ if __name__ == '__main__':
 			if args.debug == 1:
 				cv2.imshow('pix', pix)
 				cv2.waitKey(0)
-	
+	print(" E2E recall {0:.3f} / {1:.3f} / {2:.3f}, precision: {3:.3f}".format(
+                                        tp_e2e_all / float(max(1, gt_e2e_all)),
+                                        tp_all / float(max(1, gt_e2e_all)),
+                                        tp_e2e_ed1_all / float(max(1, gt_e2e_all)),
+                                        tp_all / float(max(1, detecitons_all))))
