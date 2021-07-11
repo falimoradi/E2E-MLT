@@ -71,18 +71,20 @@ if __name__ == '__main__':
     net = net.cuda()
 
 
-  images = glob.glob(os.path.join(args.images_dir, '*.jpg'))
+  imagess = glob.glob(os.path.join(args.images_dir, '*.jpg'))
   png = glob.glob(os.path.join(args.images_dir, '*.png'))
-  images.extend(png)
+  imagess.extend(png)
   png = glob.glob(os.path.join(args.images_dir, '*.JPG'))
-  images.extend(png)
+  imagess.extend(png)
 
   t_complt = 0
   t_afterResize = 0
 
   frame_no = 0
+
+  print(len(imagess))
   with torch.no_grad():
-    for img in images:
+    for img in imagess:
       start_comp = time.time()
 #       ret, im = cap.read()
       im = cv2.imread(img)
@@ -146,4 +148,4 @@ if __name__ == '__main__':
       # cv2.imwrite('res_{}.jpg'.format(img.split('/')[-1][:-4]), im)
 
   print(t_complt, t_afterResize)
-  print(t_complt/len(images), t_afterResize/len(images))
+  print(t_complt/len(imagess), t_afterResize/len(imagess))
