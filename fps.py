@@ -56,6 +56,7 @@ if __name__ == '__main__':
   parser.add_argument('-cuda', type=int, default=1)
   parser.add_argument('-model', default='E2E-MLT_26000.h5')
   parser.add_argument('-segm_thresh', default=0.5)
+  parser.add_argument('-images_dir', default='/home/alimoradi/scene_text_dataset/valid_dataset')
 
   font2 = ImageFont.truetype("Arial-Unicode-Regular.ttf", 18)
 
