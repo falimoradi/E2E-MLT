@@ -10,7 +10,7 @@ import torch.nn.functional as F
 import os
 import codecs
 
-f = codecs.open('codec.txt', 'r', 'utf-8')
+f = codecs.open('codec_mine2.txt', 'r', 'utf-8')
 codec = f.readlines()[0]
 f.close()
 print(len(codec))
@@ -21,10 +21,12 @@ import argparse
 
 import ocr_gen
 
-from warpctc_pytorch import CTCLoss
+# from warpctc_pytorch import CTCLoss
+from torch_baidu_ctc import ctc_loss, CTCLoss
+
 from torch.autograd import Variable
 
-from models import ModelResNetSep2
+from models import ModelMLTRCTW
 from ocr_test_utils import print_seq_ext
 import random
 
@@ -41,7 +43,7 @@ disp_interval = 500
      
 def main(opts):
   
-  model_name = 'E2E'
+  model_name = 'E2E_jocr'
   net = ModelMLTRCTW(attention=True)
   acc = []
   
@@ -133,16 +135,19 @@ def main(opts):
 if __name__ == '__main__': 
   parser = argparse.ArgumentParser()
   
-  parser.add_argument('-train_list', default='/home/busta/data/90kDICT32px/train_mlt.txt')
+  parser.add_argument('-train_list', default='/home/alimoradi/scene_word_dataset/gt.txt')
   parser.add_argument('-valid_list', default='/home/busta/data/icdar_ch8_validation/ocr_valid.txt')
   parser.add_argument('-save_path', default='backup2')
-  parser.add_argument('-model', default='e2e-mltrctw.h5')
+  parser.add_argument('-model', default='E2E-MLT_26000.h5')
   parser.add_argument('-debug', type=int, default=0)
   parser.add_argument('-batch_size', type=int, default=4)
   parser.add_argument('-num_readers', type=int, default=1)
   parser.add_argument('-cuda', type=bool, default=True)
   parser.add_argument('-norm_height', type=int, default=40)
   
-  args = parser.parse_args()  
+  args = parser.parse_args()
+
+  if not os.path.exists('/home/alimoradi/E2E-MLT/backup2'):
+    os.mkdir('/home/alimoradi/E2E-MLT/backup2')
   main(args)
   
