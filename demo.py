@@ -4,12 +4,12 @@ Created on Aug 25, 2017
 @author: busta
 '''
 
-import cv2
+import cv2, glob, os, codecs
 import numpy as np
 
 from nms import get_boxes
 
-from models import ModelResNetSep2
+from models import ModelMLTRCTW
 import net_utils
 
 from ocr_utils import ocr_image
@@ -22,7 +22,8 @@ from PIL import Image
 from PIL import ImageFont
 from PIL import ImageDraw
 
-f = open('codec.txt', 'r', encoding='utf-8')
+
+f = codecs.open('codec_mine2.txt', 'r', encoding='utf-8')
 codec = f.readlines()[0]
 f.close()
 
@@ -51,14 +52,14 @@ if __name__ == '__main__':
 
   parser = argparse.ArgumentParser()
   parser.add_argument('-cuda', type=int, default=1)
-  parser.add_argument('-model', default='e2e-mlt.h5')
+  parser.add_argument('-model', default='E2E-MLT_26000.h5')
   parser.add_argument('-segm_thresh', default=0.5)
 
   font2 = ImageFont.truetype("Arial-Unicode-Regular.ttf", 18)
 
   args = parser.parse_args()
 
-  net = ModelResNetSep2(attention=True)
+  net = ModelMLTRCTW(attention=True)
   net_utils.load_net(args.model, net)
   net = net.eval()
 
@@ -69,64 +70,68 @@ if __name__ == '__main__':
 #   cap = cv2.VideoCapture(0)
 #   cap.set(cv2.CAP_PROP_AUTOFOCUS, 1)
 #   ret, im = cap.read()
+  images = glob.glob(os.path.join(args.images_dir, '*.jpg'))
+  png = glob.glob(os.path.join(args.images_dir, '*.png'))
+  images.extend(png)
+  png = glob.glob(os.path.join(args.images_dir, '*.JPG'))
+  images.extend(png)
 
   frame_no = 0
   with torch.no_grad():
-    if True:
+    for img in images:
 #       ret, im = cap.read()
-      im = cv2.imread('1.jpg')
+      im = cv2.imread(img)
       # im = cv2.cvtColor(im, cv2.COLOR_BGR2RGB)
 
-      if True:
-        im_resized, (ratio_h, ratio_w) = resize_image(im, scale_up=False)
-        images = np.asarray([im_resized], dtype=np.float)
-        images /= 128
-        images -= 1
-        im_data = net_utils.np_to_variable(images, is_cuda=args.cuda).permute(0, 3, 1, 2)
-        seg_pred, rboxs, angle_pred, features = net(im_data)
+      im_resized, (ratio_h, ratio_w) = resize_image(im, scale_up=False)
+      images = np.asarray([im_resized], dtype=np.float)
+      images /= 128
+      images -= 1
+      im_data = net_utils.np_to_variable(images, is_cuda=args.cuda).permute(0, 3, 1, 2)
+      seg_pred, rboxs, angle_pred, features = net(im_data)
 
-        rbox = rboxs[0].data.cpu()[0].numpy()
-        rbox = rbox.swapaxes(0, 1)
-        rbox = rbox.swapaxes(1, 2)
+      rbox = rboxs[0].data.cpu()[0].numpy()
+      rbox = rbox.swapaxes(0, 1)
+      rbox = rbox.swapaxes(1, 2)
 
-        angle_pred = angle_pred[0].data.cpu()[0].numpy()
+      angle_pred = angle_pred[0].data.cpu()[0].numpy()
+
+      segm = seg_pred[0].data.cpu()[0].numpy()
+      segm = segm.squeeze(0)
 
 
-        segm = seg_pred[0].data.cpu()[0].numpy()
-        segm = segm.squeeze(0)
+      boxes =  get_boxes(segm, rbox, angle_pred, args.segm_thresh)
 
-        draw2 = np.copy(im_resized)
-        boxes =  get_boxes(segm, rbox, angle_pred, args.segm_thresh)
+      draw2 = np.copy(im_resized)
+      img = Image.fromarray(draw2)
+      draw = ImageDraw.Draw(img)
 
-        img = Image.fromarray(draw2)
-        draw = ImageDraw.Draw(img)
+      #if len(boxes) > 10:
+      #  boxes = boxes[0:10]
 
-        #if len(boxes) > 10:
-        #  boxes = boxes[0:10]
+      out_boxes = []
+      for box in boxes:
+        pts = box[0:8]
+        pts = pts.reshape(4, -1)
 
-        out_boxes = []
-        for box in boxes:
+        det_text, conf, dec_s = ocr_image(net, codec, im_data, box)
+        if len(det_text) == 0:
+          continue
 
-          pts  = box[0:8]
-          pts = pts.reshape(4, -1)
+        width, height = draw.textsize(det_text, font=font2)
+        center = [box[0], box[1]]
+        draw.text((center[0], center[1]), det_text, fill=(0,255,0),font=font2)
 
-          det_text, conf, dec_s = ocr_image(net, codec, im_data, box)
-          if len(det_text) == 0:
-            continue
+        out_boxes.append(box)
+        print(det_text)
 
-          width, height = draw.textsize(det_text, font=font2)
-          center =  [box[0], box[1]]
-          draw.text((center[0], center[1]), det_text, fill = (0,255,0),font=font2)
-          out_boxes.append(box)
-          print(det_text)
+      im = np.array(img)
+      for box in out_boxes:
+        pts = box[0:8]
+        pts = pts.reshape(4, -1)
+        draw_box_points(im, pts, color=(0, 255, 0), thickness=1)
 
-        im = np.array(img)
-        for box in out_boxes:
-          pts  = box[0:8]
-          pts = pts.reshape(4, -1)
-          draw_box_points(im, pts, color=(0, 255, 0), thickness=1)
-
-        # cv2.imshow('img', im)
-        # cv2.waitKey(10)
-        cv2.imwrite('res.jpg', im)
+      # cv2.imshow('img', im)
+      # cv2.waitKey(10)
+      cv2.imwrite('res_{}.jpg'.format(img.split('/')[-1][:-4]), im)
 
